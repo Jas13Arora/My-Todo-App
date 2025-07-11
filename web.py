@@ -1,6 +1,8 @@
 import streamlit as st
 import functions
 
+st.set_page_config(layout="wide")  # Moved this to the top
+
 todos = functions.get_todos()
 
 def add_todo():
@@ -8,58 +10,58 @@ def add_todo():
     if todo != "\n":
         todos.append(todo)
         functions.write_todos(todos)
-        st.session_state["new_todo"] = ""  # Clear input
+        st.session_state["new_todo"] = ""  # Clear input field
 
-# Create 2 columns side by side
-left_col, right_col = st.columns([2, 1])  # Adjust the width ratio here
+# Setup layout columns
+left_col, right_col = st.columns([2, 1])
 
-# LEFT COLUMN – Todo App
+# --- LEFT SIDE: Main Todo App ---
 with left_col:
     st.title("My Todo App")
     st.subheader("by Jas Arora")
     st.write("This app is to increase your productivity.")
 
-    remove_indexes = []
+    # ✅ Only remove the checked item AFTER the loop
+    remove_index = None
 
     for index, todo in enumerate(todos):
-        todo_clean = todo.strip()
+        todo_clean = todo.strip()  # Remove \n and spaces
         checkbox = st.checkbox(todo_clean, key=f"todo_{index}")
         if checkbox:
-            remove_indexes.append(index)
+            remove_index = index
+            break  # Prevent multiple reruns during loop
 
-    if remove_indexes:
-        for index in sorted(remove_indexes, reverse=True):
-            todos.pop(index)
-            del st.session_state[f"todo_{index}"]
+    # ✅ Remove task outside the loop to avoid index shifting
+    if remove_index is not None:
+        todos.pop(remove_index)
         functions.write_todos(todos)
+        del st.session_state[f"todo_{remove_index}"]
         st.rerun()
 
+    # Input to add new todo
     st.text_input(label="", placeholder="Add a new todo...",
                   on_change=add_todo, key='new_todo')
 
-# RIGHT COLUMN – Instructions
+# --- RIGHT SIDE: Instructions ---
 with right_col:
     st.header("📋 Instructions")
-    st.set_page_config(layout="wide")
     st.markdown("""
-  **How to use this app:**
-    
-    1.  If you want to add anything, 
-	    just write your task on the desired area.
-    2.  If you want to edit any task, just write 
-        your task on the desired area and press 
-        the checkbox of the todo.
-    3.  If you want to finish any task, you can 
-        press the checkbox which is on the left 
-        side of the task.
-    ---
-    **Tips to stay productive:**
-    - Break big goals into smaller tasks.
-    - Don’t overload — focus on 5-7 tasks/day.
-    - Review your list every night.
-    - Keep it simple and realistic.
-    
-    ---
-    **Any Queries?**
-    - Reach me out at: `imjasarora@gmail.com`
-                """)
+**How to use this app:**
+
+1. If you want to add anything, just write your task in the input box.
+2. If you want to edit any task, write the updated task and press the checkbox of the old one.
+3. If you want to finish any task, press the checkbox next to it.
+
+---
+
+**Tips to stay productive:**
+- Break big goals into smaller tasks.
+- Don’t overload — focus on 5-7 tasks/day.
+- Review your list every night.
+- Keep it simple and realistic.
+
+---
+
+**Any Queries?**
+- Reach me at: `imjasarora@gmail.com`
+""")
