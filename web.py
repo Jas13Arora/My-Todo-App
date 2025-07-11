@@ -10,7 +10,7 @@ def add_todo():
 
 
 st.title("My Todo App")
-st.subheader ("This is my todo app.")
+st.subheader ("by Jas Arora.")
 st.write("This app is to increase your productivity.")
 
 
