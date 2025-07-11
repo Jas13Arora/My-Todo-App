@@ -45,7 +45,7 @@ with right_col:
   **How to use this app:**
     
     1.  If you want to add anything, 
-	just write your task on the desired area.
+	    just write your task on the desired area.
     2.  If you want to edit any task, just write 
         your task on the desired area and press 
         the checkbox of the todo.
