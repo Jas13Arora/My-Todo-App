@@ -4,7 +4,8 @@ from datetime import date
 
 st.set_page_config(layout="wide")
 st.title("🗓️ Calendar-Based To-Do App with Notes")
-st.caption("Made by Jas Arora")
+st.caption("Hi, Jas Arora this side. Thankyou for choosing my website to make your to-do list.")
+
 
 # --- Date Picker ---
 selected_date = st.date_input("Select a date", value=date.today())
